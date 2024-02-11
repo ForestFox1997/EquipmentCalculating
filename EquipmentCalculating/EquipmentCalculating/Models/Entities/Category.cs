@@ -2,7 +2,7 @@
 {
     public class Category
     {
-        internal int Id { get; set; }
+        internal long Id { get; set; }
 
         public string Name { get; set; }
 

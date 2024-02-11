@@ -62,6 +62,14 @@
                         Command="{Binding DeactivateFilter}">
                 </Button>
 
+                <Button Width="120"
+                        Height="25"
+                        Canvas.Right="10"
+                        Canvas.Top="5"
+                        Content="Сгенерировать отчет в Excel"
+                        Command="{Binding GenerateReportCommand}">
+                </Button>
+
             </Canvas>
         </Grid>
 
@@ -85,7 +93,8 @@
                              Height="20"
                              Canvas.Left="120"
                              Canvas.Bottom="120"
-                             Text="{Binding SelectedValue.SerialNumber, ElementName=EquipmentListView}">
+                             Text="{Binding SelectedValue.SerialNumber, ElementName=EquipmentListView}"
+                             TextChanged="ValueInControlIsChanged">
                         </TextBox>
 
                         <Label Canvas.Left="5"
@@ -98,7 +107,8 @@
                              Height="20"
                              Canvas.Left="120"
                              Canvas.Bottom="100"
-                             Text="{Binding SelectedValue.Name, ElementName=EquipmentListView}">
+                             Text="{Binding SelectedValue.Name, ElementName=EquipmentListView}"
+                             TextChanged="ValueInControlIsChanged">
                         </TextBox>
 
                         <Label Canvas.Left="5"
@@ -111,9 +121,10 @@
                              Height="20"
                              Canvas.Left="120"
                              Canvas.Bottom="80"
-                             Text="{Binding SelectedValue.Category.Name, ElementName=EquipmentListView}"
+                             
                              ItemsSource="{Binding Categories}"
-                                  >
+                                  SelectedItem="{Binding SelectedValue.Category, ElementName=EquipmentListView}"
+                             SelectionChanged="ComboBox_SelectionChanged">
                         </ComboBox>
 
                         <Label Canvas.Left="5"
@@ -126,7 +137,11 @@
                              Height="20"
                              Canvas.Left="120"
                              Canvas.Bottom="60"
-                             IsChecked="{Binding SelectedValue.GoodCondition, ElementName=EquipmentListView}">
+                             IsChecked="{Binding SelectedValue.GoodCondition, ElementName=EquipmentListView}"
+                             IsEnabledChanged="CheckBox_IsEnabledChanged"
+                             Checked="CheckBox_Checked"
+                             Unchecked="CheckBox_Checked"    >
+                             
                         </CheckBox>
 
                         <Label Canvas.Left="5"
@@ -139,7 +154,10 @@
                                   Height="20"
                                   Canvas.Left="120"
                                   Canvas.Bottom="40"
-                                  IsChecked="{Binding SelectedValue.Location.IsWarehouse, ElementName=EquipmentListView}">
+                                  IsChecked="{Binding SelectedValue.Location.IsWarehouse, ElementName=EquipmentListView}"
+                                  IsEnabledChanged="CheckBox_IsEnabledChanged"
+                                  Checked="CheckBox_Checked"
+                                  Unchecked="CheckBox_Checked">
                             Склад
                         </CheckBox>
 
@@ -154,21 +172,26 @@
                              Height="20"
                              Canvas.Left="230"
                              Canvas.Bottom="40"
-                             Text="{Binding SelectedValue.Location.Number, ElementName=EquipmentListView}">
+                             Text="{Binding SelectedValue.Location.Number, ElementName=EquipmentListView}"
+                             TextChanged="ValueInControlIsChanged">
                         </TextBox>
 
                         <TextBox Width="210"
                              Height="20"
                              Canvas.Left="330"
                              Canvas.Bottom="40"
-                             Text="{Binding SelectedValue.Location.Name, ElementName=EquipmentListView}">
+                             Text="{Binding SelectedValue.Location.Name, ElementName=EquipmentListView}"
+                             TextChanged="ValueInControlIsChanged">
                         </TextBox>
 
                         <CheckBox Width="210"
                               Height="20"
                               Canvas.Left="550"
                               Canvas.Bottom="40"
-                              IsChecked="{Binding SelectedValue.Location.IsLegalEntity, ElementName=EquipmentListView}">
+                              IsChecked="{Binding SelectedValue.Location.IsLegalEntity, ElementName=EquipmentListView}"
+                              IsEnabledChanged="CheckBox_IsEnabledChanged"
+                              Checked="CheckBox_Checked"
+                              Unchecked="CheckBox_Checked">
                             Юридические лицо
                         </CheckBox>
 
@@ -240,9 +263,12 @@
                 <DataGrid Grid.Column="0"
                           ItemsSource="{Binding EquipmentList}"
                           SelectedValue="{Binding SelectedEquipment}"
+                          SelectedItem="{Binding CurrentEquipment}"
                           x:Name="EquipmentListView"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
+                          CurrentCellChanged="EquipmentListView_CurrentCellChanged"
+                          
                           >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Серийный номер"
@@ -267,7 +293,9 @@
                 
                 <ListView Grid.Column="1"
                       ItemsSource="{Binding Categories}"
-                      SelectedValue="{Binding SelectedCategory}">
+                      SelectedValue="{Binding SelectedCategory}"
+                          
+                          >
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment"

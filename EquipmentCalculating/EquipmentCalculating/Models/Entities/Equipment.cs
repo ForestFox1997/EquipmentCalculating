@@ -2,7 +2,7 @@
 {
     public class Equipment
     {
-        internal int Id { get; set; }
+        internal long? Id { get; set; }
 
         public string SerialNumber { get; set; }
 

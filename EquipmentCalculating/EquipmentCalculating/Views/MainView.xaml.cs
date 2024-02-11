@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EquipmentCalculating.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,37 @@ namespace EquipmentCalculating.Views
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void EquipmentListView_CurrentCellChanged(object sender, EventArgs e)
+        {
+            SaveRecord();
+        }
+
+        private void ValueInControlIsChanged(object sender, TextChangedEventArgs e)
+        {
+            SaveRecord();
+        }
+
+        private void SaveRecord()
+        {
+            var dataContext = DataContext as MainViewModel;
+            dataContext.ActualizeCommand.Execute(null);
+        }
+
+        private void CheckBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            SaveRecord();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SaveRecord();
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            SaveRecord();
         }
     }
 }

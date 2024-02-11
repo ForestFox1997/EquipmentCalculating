@@ -2,7 +2,7 @@
 {
     public class Location
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Number { get; set; }
 
@@ -10,7 +10,7 @@
 
         public string Name { get; set; }
 
-        public string IsLegalEntity { get; set; }
+        public bool IsLegalEntity { get; set; }
 
     }
 }

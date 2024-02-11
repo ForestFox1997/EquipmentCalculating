@@ -17,16 +17,12 @@ namespace EquipmentCalculating.ViewModels
 
         public MainViewModel()
         {
-            //_dataModel = new MainDataModel();
+            _dataModel = new MainDataModel();
 
-            // HACK !! Тестовые данные
-            Equipments = new ObservableCollection<Equipment>()
-            {
-                new Equipment { SerialNumber = "7777", Location = new Location() { Name = "Веселый бункер", IsWarehouse = true }, Category = new Category() { Name = "===КАТЕГОРИЯ===" } },
-                new Equipment() { SerialNumber = "8888" }
-            };
+            Categories = new BindingList<Category>(_dataModel.Categories);
 
-            // EquipmentList = CollectionViewSource.GetDefaultView(Equipments);
+            Equipments = new ObservableCollection<Equipment>(_dataModel.Equipments);
+
             EquipmentList = new ListCollectionView(Equipments);
         }
 
@@ -37,16 +33,16 @@ namespace EquipmentCalculating.ViewModels
         public ICommand RemoveCategoryCommand => new RelayCommand(RemoveCategory);
         public ICommand ActivateFilter => new RelayCommand(ApplyFilter);
         public ICommand DeactivateFilter => new RelayCommand(DisableFilter);
+        public ICommand GenerateReportCommand => new RelayCommand(GenerateReport);
+        public ICommand ActualizeCommand => new RelayCommand(SaveCurrentRecord);
         #endregion Команды
 
         public ListCollectionView EquipmentList { get; set; }
 
         ObservableCollection<Equipment> Equipments { get; set; }
-
         public Equipment SelectedEquipment { get; set; }
 
-        public BindingList<Category> Categories { get; set; } = new BindingList<Category>();
-
+        public BindingList<Category> Categories { get; set; }
         public Category SelectedCategory { get; set; }
 
         public string LocationFilter { get; set; }
@@ -55,15 +51,21 @@ namespace EquipmentCalculating.ViewModels
 
         public Category CategoryFilter { get; set; }
 
+        public void SaveCurrentRecord()
+        {
+            _dataModel.SaveEquipment(SelectedEquipment);
+        }
+
         public void AddEquipment()
         {
-            Equipments.Add(new Equipment());
+            Equipments.Add(new Equipment() { Category = GetLastCategory() });
         }
 
         public void RemoveEquipment()
         {
             if (SelectedEquipment != null)
             {
+                _dataModel.RemoveEquipment(SelectedEquipment);
                 Equipments.Remove(SelectedEquipment);
             }
         }
@@ -75,7 +77,8 @@ namespace EquipmentCalculating.ViewModels
 
             if (!categoryExist)
             {
-                Categories.Add(new Category { Name = NewCategory });
+                var newCategory = _dataModel.AddCategory(NewCategory);
+                Categories.Add(newCategory);
             }
         }
 
@@ -83,6 +86,7 @@ namespace EquipmentCalculating.ViewModels
         {
             if (SelectedCategory != null)
             {
+                _dataModel.RemoveCategory(SelectedCategory);
                 Categories.Remove(SelectedCategory);
             }
         }
@@ -113,6 +117,16 @@ namespace EquipmentCalculating.ViewModels
             }
 
             return true;
+        }
+
+        private Category GetLastCategory()
+        {
+            return Categories.Last();
+        }
+
+        private void GenerateReport()
+        {
+
         }
     }
 }
