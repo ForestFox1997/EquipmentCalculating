@@ -8,6 +8,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Collections.ObjectModel;
+using EquipmentCalculating.Services;
 
 namespace EquipmentCalculating.ViewModels
 {
@@ -126,7 +127,7 @@ namespace EquipmentCalculating.ViewModels
 
         private void GenerateReport()
         {
-
+            ExcelReportService.GenerateExcelReport(Equipments);
         }
     }
 }
